@@ -1,0 +1,127 @@
+
+    //       单例模式
+    //        var obj = {
+    //            name : "xxs",
+    //            age : 11,
+    //            fn : function(){
+    //                console.log(this.name);
+    //            }
+    //        }
+    //        obj.fn();
+
+        //工厂模式
+//          原料投入 -- 函数参数
+//          加工过程 -- 函数功能
+//          成品出厂 --return返回值
+//        function message(name,age) {
+//            var user = {};
+//            user.name = name;
+//            user.age = age;
+//            user.fn = function() {
+//                if(user.age < 20) {
+//                    user.message = "少年";
+//                } else if(user.age < 30) {
+//                    user.message = "青年";
+//                } else if(user.age < 50) {
+//                    user.message = "中年"
+//                } else {
+//                    user.message = "老年";
+//                }
+//                   console.log(user.message);
+//            }
+//            user.fn();
+//            return user;
+//        }
+//        var people = message("H5",19);
+//        var people2 = message("IOS",30);
+//        console.log(people.fn == people2.fn);
+//      工厂模式没有实现函数封装，对象的属性值不会相互影响，每个对象都调用不同的方法
+//      缺点： 1. 函数空间分别创建，产生资源浪费   2. 可读性较差
+
+
+//       工厂模式 ---> 构造模式
+//           1.函数名为大驼峰
+//           2.调用函数改为 new 实例化
+//           3.去掉返回值
+//           4.不需要定义对象，借助this来代替
+//       构造函数与普通函数的区别：
+//          1. 构造函数的this指向创建的对象
+//          2. 普通函数的this指向window
+
+//        function Message(name,age) {
+//            this.name = name;
+//            this.age = age;
+//            this.fn = function() {
+//                if(this.age < 20) {
+//                    this.message = "少年";
+//                } else if (this.age < 30){
+//                    this.message = "青年";
+//                } else {
+//                    this.message = "老年";
+//                }
+//                console.log(this.message);
+//            }
+//            this.fn();
+//        }
+//        var people = new Message("xx",11);
+//        var people2 = new Message("yy",22);
+//        console.log(people.fn  == people2.fn);
+
+//      没有实现函数封装，每个对象都是调用不同的方法； 实现了属性封装
+//      构造函数：缺点
+//            1.多个对象的方法无法共用
+//            2.创建了多个空间进行属性和方法的存储，从而降低了性能，产生资源浪费
+
+
+//      原型模式用途：
+//         1. 每个函数都有一个prototype原型属性和一个__proto__隐士原型。 原型属性是一个指针，指向原型对象
+//         2. 共享原型所包含的所有的实例属性和方法 --- 多个实例化对象的方法共用同一个空间，
+//          完美解决了工厂模式和构造模式创建多个空间产生资源浪费问题
+
+//      特点：
+//           1.在默认情况下，所有属性值全部相同，因为没有通过构造函数给对象属性初始化，
+//           即使初始化了也会导致对象中的属性值都一样，因为所有实例化的对象都是共享一个原型方法
+//           虽然很好的解决了函数存储空间浪费的问题，但是对于基本类型属性操作起来不方便。
+//           2. 对于引用类型的属性，由于其共享功能，会导致多个实例化对象相互影响
+//      含义：
+//          1. 每个函数都有一个原型和一个隐式原型；
+//          2. 当方法和属性定义在原型上时，该属性和方法会被所有实例化的对象公用
+//      优点：
+//           针对函数(也就是方法)创建了一个空间存储，节省资源
+//      缺点：
+//           针对属性，不便于操作，同时引用类型的属性值会相互影响
+//           每次实例化对象都会覆盖之前的对象的属性，因为共享一个方法
+
+//        function People(name) {
+//            People.prototype.name = name;
+//            People.prototype.age = 20;
+//        }
+//        People.prototype.friend = ["h5","ios","php"];
+//        People.prototype.fn = function() {
+//            console.log(this.friend + "  " + this.name);
+//        }
+//        var peo = new People("nihao");
+//        var peo2 = new People("hello");
+//        peo.friend.push("H5");
+//        peo.fn();
+//        peo2.fn();
+//        //检测多个对象方法是否属于同一个空间
+//        console.log(peo.fn == peo2.fn);
+
+//      混合模式： 为了解决原型模式属性之间相互影响、覆盖等问题所产生的
+//            1. 属性使用构造函数创建  (属性值之间没有影响，this永远指向当前的对象)
+//            2. 方法使用原型模式创建  (对象使用同一个空间)
+
+        function Message(name,age) {
+            this.name = name;
+            this.age = age;
+        }
+        Message.prototype.fn = function() {
+            console.log(this.name + "  " + this.age);
+        }
+        var peo1 = new Message("H5",10);
+        var peo2 = new Message("IOS",30);
+        peo1.fn();
+        peo2.fn();
+        //检测多个对象方法是否属于同一空间
+        console.log(peo1.fn);
